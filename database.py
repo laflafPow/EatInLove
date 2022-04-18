@@ -19,3 +19,16 @@ def db_user_val(UserName: str, Age: int, GenderID: int, CityID: int):
     cursor.execute('INSERT INTO test (UserName, Age, GenderID, CityID) VALUES (?, ?, ?, ?)',
                    (UserName, Age, GenderID, CityID))
     conn.commit()
+
+def db_prefer_val(UserID, FoodID):
+    cursor.execute('SELECT UserID From User Where UserName =?', UserName)
+    UserID = cursor.fetchone()
+    UserID = UserID[1]
+
+    cursor.execute('SELECT FoodID From User Where FoodName =?', FoodName)
+    FoodID = cursor.fetchone()
+    FoodID = FoodID[1]
+
+    cursor.execute('INSERT INTO prefere (UserID, FoodID) VALUES (?, ?)',
+                   (UserID, FoodID))
+    conn.commit()

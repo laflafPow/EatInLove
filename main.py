@@ -1,6 +1,7 @@
 # Основной файл, где будет проходить главный поток программы
 
 import telebot
+from telebot import types
 import database
 import userInteraction
 
@@ -9,31 +10,33 @@ import userInteraction
 token = '5270245996:AAEDYl1qVn02R-JFxF5HhrJ47RQwEItT3ww'
 bot = telebot.TeleBot(token)
 
-userInteraction.start_message()
+@bot.message_handler(commands='start')
+def start_message(message):
+    msg = bot.send_message(message.chat.id, 'Привет! Я помогу найти'
+                                      ' тебе человека с которым '
+                                      'ты сможешь хорошо провести время,'
+                                      ' т.е. покушать, но для начала'
+                                      ' расскажи чутка о себе,'
+                                      ' чтобы я нашел подходящего человека...'
+                                      '\n\nКак тебя зовут?')
+    bot.register_next_step_handler(msg, get_age)
 
-userlist = []
+def get_age(message):
+    msg = bot.send_message(message.chat.id, 'Крутое имя, перейдем дальше, сколько тебе лет?')
 
+    bot.register_next_step_handler(msg, get_gender)
 
-def name_handler(pm):
-    name = pm.text
-    userlist.insert(name)
-    sent_msg = bot.send_message(pm.chat.id, f"Ладно, {name}, а сколько тебе лет?")
-    bot.register_next_step_handler(sent_msg, age_handler, name)
+def get_gender(message):
+    rmk = types.ReplyKeyboardMarkup()
+    rmk.add(types.KeyboardButton('Мужской'), types.KeyboardButton('Женский'))
 
+    msg = bot.send_message(message.chat.id, 'Укажи свой пол', reply_markup=rmk)
+    bot.register_next_step_handler(msg, get_genderSearch)
 
-def age_handler (pm, name):
-    age = pm.text
-    userlist.insert(age)
-    sent_msg = (pm.chat.id, f"Приятно познакомиться, перейдем на следующий этап. Из какого ты города?")
-    bot.register_next_step_handler(sent_msg, city_handler)
+def get_genderSearch(message):
+    rmk = types.ReplyKeyboardMarkup()
+    rmk.add(types.KeyboardButton('Мужчин'), types.KeyboardButton('Женщин'), types.KeyboardButton('Всех'))
 
+    msg = bot.send_message(message.chat.id, 'Кого будем искать?', reply_markup=rmk)
 
-def city_handler(pm):
-    city = pm.text
-    info = cursor.execute(f"SELECT * FROM City WHERE [Name]={city}")
-    if info.fetchone() is None:
-        bot.send_message('Этот город мы еще не поддерживаем :c У нас есть только Москва и Санкт-Петербург')
-    else:
-        print(info)
-
-bot.polling(none_stop=True)
+bot.infinity_polling()

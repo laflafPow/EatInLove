@@ -31,12 +31,30 @@ def get_gender(message):
     rmk.add(types.KeyboardButton('Мужской'), types.KeyboardButton('Женский'))
 
     msg = bot.send_message(message.chat.id, 'Укажи свой пол', reply_markup=rmk)
+
     bot.register_next_step_handler(msg, get_genderSearch)
+
 
 def get_genderSearch(message):
     rmk = types.ReplyKeyboardMarkup()
     rmk.add(types.KeyboardButton('Мужчин'), types.KeyboardButton('Женщин'), types.KeyboardButton('Всех'))
 
     msg = bot.send_message(message.chat.id, 'Кого будем искать?', reply_markup=rmk)
+
+    bot.register_next_step_handler(msg, get_city)
+
+
+def get_city(message):
+    rmk = types.ReplyKeyboardRemove()
+
+    msg = bot.send_message(message.chat.id, 'Укажите город!', reply_markup=rmk)
+    bot.register_next_step_handler(msg, get_userDescription)
+
+def get_userDescription(message):
+    msg = bot.send_message(message.chat.id, 'Расскажи что-то о себе. Это повысит шанс на взаимную симпатию:)')
+    # bot.register_next_step_handler(msg, get_userPhoto)
+
+# def get_userPhoto(message):
+
 
 bot.infinity_polling()

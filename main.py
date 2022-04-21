@@ -52,9 +52,26 @@ def get_city(message):
 
 def get_userDescription(message):
     msg = bot.send_message(message.chat.id, 'Расскажи что-то о себе. Это повысит шанс на взаимную симпатию:)')
-    # bot.register_next_step_handler(msg, get_userPhoto)
+    bot.register_next_step_handler(msg, get_userPrefer)
 
-# def get_userPhoto(message):
+def get_userPrefer(message):
+    rmk = types.ReplyKeyboardMarkup()
+    rmk.add(types.KeyboardButton('Сохранить'))
 
+    msg = bot.send_message(message.chat.id, 'Выбери свои предпочтения в еде нажав на соответсвующие цифры, как закончишь нажми на кнопку:\n\n'
+                                            '/1 - Фастфуд\n'
+                                            '/2 - Китайская кухня\n'
+                                            '/3 - Японская кухня\n'
+                                            '/4 - Грузинская кухня\n'
+                                            '/5 - Итальянаская кухня\n',
+                                            reply_markup=rmk)
+
+    bot.register_next_step_handler(msg, get_photo)
+
+@bot.message_handler(content_types= ['photo'])
+def get_photo(message):
+    rmk = types.ReplyKeyboardRemove()
+
+    msg = bot.send_message(message.chat.id, 'Остался последний шаг! Отправьте до 3-х фотографий:', reply_markup=rmk)
 
 bot.infinity_polling()

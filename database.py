@@ -20,8 +20,10 @@ def db_user_val(UserName: str, Age: int, GenderID: int, CityID: int):
                    (UserName, Age, GenderID, CityID))
     conn.commit()
 
+#Метод внесения данных в таблицу Предпочтений(prefere)
+
 def db_prefer_val(UserID, FoodID):
-    cursor.execute('SELECT UserID From User Where UserName =?', UserName)
+    cursor.execute('SELECT UserID From User Where UserName =?', UserName) #Конвертируем UserName в UserID
     UserID = cursor.fetchone()
     UserID = UserID[1]
 
@@ -32,3 +34,6 @@ def db_prefer_val(UserID, FoodID):
     cursor.execute('INSERT INTO prefere (UserID, FoodID) VALUES (?, ?)',
                    (UserID, FoodID))
     conn.commit()
+#-----------------------------------------------------------------------------
+
+

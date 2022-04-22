@@ -4,22 +4,42 @@ import telebot
 from telebot import types
 import database
 import userInteraction
+import emoji
 
 # в файле database будут храниться все методы для взаимодействия с бд
 
 token = '5270245996:AAEDYl1qVn02R-JFxF5HhrJ47RQwEItT3ww'
 bot = telebot.TeleBot(token)
 
+# данные пользователя
+userName = ''
+
 @bot.message_handler(commands='start')
 def start_message(message):
+    rmk = types.ReplyKeyboardMarkup()
+    rmk.add(types.KeyboardButton(emoji.emojize(':OK_hand:')))
+
     msg = bot.send_message(message.chat.id, 'Привет! Я помогу найти'
                                       ' тебе человека с которым '
                                       'ты сможешь хорошо провести время,'
                                       ' т.е. покушать, но для начала'
                                       ' расскажи чутка о себе,'
-                                      ' чтобы я нашел подходящего человека...'
-                                      '\n\nКак тебя зовут?')
-    bot.register_next_step_handler(msg, get_age)
+                                      ' чтобы я нашел подходящего человека...', reply_markup=rmk)
+
+    bot.register_next_step_handler(msg, get_name)
+
+def get_name(message):
+    rmk = types.ReplyKeyboardRemove()
+    msg = bot.send_message(message.chat.id, 'Как тебя зовут?', reply_markup=rmk)
+
+    if message.content_type != 'text':
+        bot.send_message(message.chat.id, 'Я не думаю что тебя так зовут, попробуем еще раз')
+        bot.register_next_step_handler(msg, get_name)
+    else:
+        global userName
+        print(message.text)
+        userName = msg.text
+        bot.register_next_step_handler(msg, get_age)
 
 def get_age(message):
     msg = bot.send_message(message.chat.id, 'Крутое имя, перейдем дальше, сколько тебе лет?')

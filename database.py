@@ -16,7 +16,7 @@ cursor = conn.cursor()
 # Метод для внесения значений в таблицу User и сохранения изменений
 
 def db_user_val(UserName: str, Age: int, GenderID: int, CityID: int):
-    cursor.execute('INSERT INTO test (UserName, Age, GenderID, CityID, MaleSearch, Discription) VALUES (?, ?, ?, ?, ?, ?)',
+    cursor.execute('INSERT INTO User (UserName, Age, GenderID, CityID, MaleSearch, Discription) VALUES (?, ?, ?, ?, ?, ?)',
                    (UserName, Age, GenderID, CityID, MaleSearch, Discription))
     conn.commit()
 
@@ -39,8 +39,18 @@ def db_prefer_val(UserID, FoodID):
 #-----------------------------------------------------------------------------
 
 #Метод конвертирования картинки в бинарный вид
-def img_bin(img_path):
-    f = open(img_path, "rb")
+def img_bin(img):
+    f = open(img, "rb")
     imgbin = f.read
     return imgbin
+
+#Метод добавления понравившихся пользователей
+def Like(Who, Whom):
+
+    cursor.execute(
+        'INSERT INTO UserLike (WhoLiked, WhomLiked) VALUES (?, ?)',
+        (Who, Whom))
+    conn.commit()
+
+##asdasdasd
 

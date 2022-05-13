@@ -2,6 +2,8 @@
 
 import sqlite3
 import telebot
+import random
+
 
 # Подключаем бота
 
@@ -53,4 +55,23 @@ def Like(Who, Whom):
     conn.commit()
 
 ##asdasdasd
+
+
+
+
+def search(UserID, MaleSearch):
+    cursor.execute('SELECT Count(*) From User')
+    rndID = random.randint(1, cursor.fetchone()[0] + 1)
+    while(rndID == UserID):
+        rndID = random.randint(1, cursor.fetchone()[0]+1)
+
+    cursor.execute('SELECT MaleSearch From User Where UserID !=? and Gender=? and MaleSearch =?', rndID, MaleSearch, GenderID)
+
+
+    #Данные предложенного человека из поиска:
+    SuserID
+    SuserName
+    SuserAge
+    SuserGenderID
+
 

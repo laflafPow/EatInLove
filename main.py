@@ -246,21 +246,24 @@ def menu_choice(message):
         bot.register_next_step_handler(msg, change_UserSettings)
     elif message.text == '🔍 Поиск':
         print()
+    else:
+
 
 
 def change_UserSettings(message):
     if message.text == '👤 Имя':
         welcome(message)
-    elif message.text == '👤 Имя':
+    elif message.text == '👤 Возраст':
+        get_Name(message)
+    elif message.text == '👤 Пол':
+        get_Age(message)
+    elif message.text == '👤 Город':
+        get_MaleSearch(message)
+    elif message.text == '👤 Описание':
         welcome(message)
-    elif message.text == '👤 Имя':
+    elif message.text == '👤 Предпочтения в еде':
         welcome(message)
-    elif message.text == '👤 Имя':
-        welcome(message)
-    elif message.text == '👤 Имя':
-        welcome(message)
-    elif message.text == '👤 Имя':
-        welcome(message)
+    else
 
 
 bot.infinity_polling()
